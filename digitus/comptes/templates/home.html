@@ -1,0 +1,129 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <h1 class="text-3xl font-bold text-gray-900">{{ message }}</h1>
+    {% if user.is_authenticated %}
+        <p class="mt-4 text-lg text-gray-700">
+            Bonjour, {{ user.username }} !
+            {% if user_type %}
+                Vous êtes connecté en tant que {{ user_type }}.
+            {% elif user.is_superuser %}
+                Vous êtes connecté en tant qu'administrateur.
+            {% else %}
+                Votre profil est en cours de configuration.
+            {% endif %}
+        </p>
+        {% if user.is_superuser %}
+            <a href="{% url 'admin:index' %}" class="mt-4 inline-block bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">Tableau de bord admin</a>
+        {% elif user_type == 'buyer' %}
+            <a href="{% url 'buyer_dashboard' %}" class="mt-4 inline-block bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">Tableau de bord acheteur</a>
+        {% elif user_type == 'seller' %}
+            <a href="{% url 'seller_dashboard' %}" class="mt-4 inline-block bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">Tableau de bord vendeur</a>
+        {% endif %}
+    {% else %}
+        <p class="mt-4 text-lg text-gray-700">Veuillez vous <a href="{% url 'login' %}" class="text-blue-600 hover:underline">connecter</a> pour continuer.</p>
+    {% endif %}
+</div>
+
+
+
+
+<!-- Hero Section -->
+    <section class="bg-gray-100 py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4"> 
+                Votre Marketplace pour l’Immobilier
+            </h1>
+            <p class="text-lg text-gray-600 mb-8">
+                Achetez, louez des maisons ou trouvez le terrain parfait pour votre projet.
+            </p>
+            <a href="{% url 'listing_list' %}" class="inline-block bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-200">
+                Explorer les Annonces
+            </a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-gray-900 text-center mb-12">
+                Nos Services
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Vente de Maisons -->
+                <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+                    <i class="fas fa-home text-blue-600 text-4xl mb-4"></i>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Vente de Maisons</h3>
+                    <p class="text-gray-600">
+                        Trouvez la maison de vos rêves parmi nos annonces vérifiées, prêtes à l’achat.
+                    </p>
+                </div>
+                <!-- Location de Maisons -->
+                <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+                    <i class="fas fa-key text-blue-600 text-4xl mb-4"></i>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Location de Maisons</h3>
+                    <p class="text-gray-600">
+                        Louez une maison confortable pour une courte ou longue durée, selon vos besoins.
+                    </p>
+                </div>
+                <!-- Vente de Terrains -->
+                <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+                    <i class="fas fa-mountain text-blue-600 text-4xl mb-4"></i>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Vente de Terrains</h3>
+                    <p class="text-gray-600">
+                        Investissez dans des terrains pour vos projets de construction ou agricoles.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call-to-Action Section -->
+    <section class="bg-blue-900 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold mb-4">
+                Prêt à Trouver Votre Bien Idéal ?
+            </h2>
+            <p class="text-lg mb-8">
+                Inscrivez-vous dès maintenant pour accéder à toutes nos annonces exclusives.
+            </p>
+            <a href="{% url 'register' %}" class="inline-block bg-white text-blue-900 py-3 px-6 rounded-lg hover:bg-gray-100 transition duration-200">
+                S’inscrire
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">MarketPlace</h3>
+                    <p class="text-gray-400">
+                        Votre plateforme pour acheter, louer des maisons et investir dans des terrains.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Liens Utiles</h3>
+                    <ul class="space-y-2">
+                        <li><a href="" class="text-gray-400 hover:text-white">FAQ</a></li>
+                        <li><a href="" class="text-gray-400 hover:text-white">Contact</a></li>
+                        <li><a href="" class="text-gray-400 hover:text-white">Conditions d’utilisation</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Suivez-nous</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 text-center text-gray-400">
+                &copy; 2025 MarketPlace. Tous droits réservés.
+            </div>
+        </div>
+    </footer>
+{% endblock %}

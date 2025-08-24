@@ -1,0 +1,54 @@
+ {% extends 'base.html' %}
+    {% block content %}
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">Tableau de bord du vendeur</h2>
+        {% if orders %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Commande</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Article</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Montant</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acheteur</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>  
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Adresse</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for order in orders %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ order.id }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ order.listing.title }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ order.amount }} </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ order.first_name }} {{ order.last_name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ order.phone }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ order.neighborhood}}, {{ order.city }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            <span class="px-2 inline-flex text-xs leading-tight font-semibold rounded-full {% if order.status == 'confirmed' %}bg-green-100 text-green-800{% elif order.status == 'pending' %}bg-yellow-100 text-blue-800{% else %}bg-red-100 text-red-800{% endif %}">
+                                {{ order.get_status_display }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            {% if order.status == 'pending' %}
+                            <a href="{% url 'confirm_order' order.id %}" class="text-blue-600 hover:text-blue-800">Confirmer</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-gray-600">Aucune commande pour le moment.</p>
+        {% endif %}
+        <div class="mt-4">
+            <a href="{% url 'listing_list' %}" class="inline-block text-blue-600 hover:underline">Retour à la liste</a>
+           
+        </div>
+    </div>
+    {% endblock %}
+  
+  

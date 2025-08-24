@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-8">
+    <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">Modifier l'annonce</h2>
+    {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+                <div class="p-4 rounded-md {% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div> 
+    {% endif %}
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+        <!-- Champs du formulaire principal -->
+        <div class="grid grid-cols-1 gap-6">
+            {% for field in form %}
+                <div>
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ field.label }}</label>
+                    <div class="mt-1">
+                        {{ field }}
+                    </div>
+                    {% if field.errors %}
+                        <p class="text-red-600 text-sm mt-1">{{ field.errors }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <!-- Formset pour les images -->
+        <h3 class="text-lg font-semibold text-gray-800 mt-8">Images</h3>
+        <div class="space-y-4">
+            {{ formset.management_form }}
+            {% for form in formset %}
+                <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-md">
+                    {{ form.id }}
+                    {% if form.instance.image %}
+                        <div class="flex-shrink-0">
+                            <img src="{{ form.instance.image.url }}" alt="Image actuelle" class="w-16 h-16 object-cover rounded-md shadow-sm">
+                        </div>
+                        <div class="flex-1">
+                            <label for="{{ form.image.id_for_label }}" class="block text-sm font-medium text-gray-700">Remplacer l'image</label>
+                            {{ form.image }}
+                            <div id="preview-{{ form.image.id_for_label }}" class="mt-2"></div>
+                        </div>
+                        <div class="flex items-center space-x-2 mt-6">
+                            {{ form.DELETE }}
+                            <label for="{{ form.DELETE.id_for_label }}" class="text-sm text-gray-700 cursor-pointer">Supprimer</label>
+                        </div>
+                    {% else %}
+                        <div class="flex-1">
+                            <label for="{{ form.image.id_for_label }}" class="block text-sm font-medium text-gray-700">Nouvelle image</label>
+                            {{ form.image }}
+                            <div id="preview-{{ form.image.id_for_label }}" class="mt-2"></div>
+                        </div>
+                    {% endif %}
+                    {% if form.errors %}
+                        <p class="text-red-600 text-sm mt-2">{{ form.errors }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <p class="text-sm text-gray-500">Formats : JPG, PNG (max 5 Mo). Vous pouvez ajouter jusqu'à 3 images.</p>
+        </div>
+        <!-- Boutons -->
+        <div class="flex justify-between mt-8">
+            <button type="submit" class="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center">
+                <span>Enregistrer les modifications</span>
+                <svg class="animate-spin h-5 w-5 ml-2 hidden" id="spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8 8 8 0 01-8-8z"></path>
+                </svg>
+            </button>
+            <a href="{% url 'listing_detail' listing.pk %}" class="bg-gray-600 text-white py-2 px-6 rounded-lg hover:bg-gray-700 transition duration-300">Annuler</a>
+        </div>
+    </form>
+</div>
+<script>
+    document.querySelectorAll('input[type="file"]').forEach(input => {
+        input.addEventListener('change', function(e) {
+            const previewId = `preview-${input.id}`;
+            const previewDiv = document.getElementById(previewId);
+            previewDiv.innerHTML = '';
+            if (e.target.files[0]) {
+                const img = document.createElement('img');
+                img.className = 'w-16 h-16 object-cover rounded-md shadow-sm';
+                img.src = URL.createObjectURL(e.target.files[0]);
+                previewDiv.appendChild(img);
+            }
+        });
+    });
+    document.querySelector('form').addEventListener('submit', () => {
+        document.getElementById('spinner').classList.remove('hidden');
+    });
+</script>
+
+{% endblock %}

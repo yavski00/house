@@ -1,0 +1,69 @@
+ <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>MyContact</title>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.2/dist/tailwind.min.css" rel="stylesheet">
+        <link rel="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.2/css/all.min.css">
+    </head>
+    <body class="bg-gray-100">
+        <!-- Navbar -->
+        <nav class="bg-white shadow-md">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex">
+                        <div class="flex-shrink-0 flex items-center">
+                            <a href="{% url 'listing_list' %}" class="text-2xl font-semibold text-gray-800">MyContact</a>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <a href="{% url 'listing_cart' %} class="hover:underline"><i class="fas fa-home-cart"></i></a>
+                        {% if user.is_authenticated %}
+                            {% if user.userprofile.user_type == 'buyer' %}
+                                <a href="{% url 'buyer_contact' %}" class="hover:underline">Contacter</a>
+                            {% elif user.userprofile.user_type == 'seller' %}
+                                <a href="{% url 'seller_contact' %}" class="hover:underline">Contacter</a>
+                            {% endif %}
+                            <a href="{% url 'inbox' %}" class="hover:underline">Messagerie</a>
+                            <a href="{% url 'logout' %}" class="hover:underline">Déconnexion</a>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="hover:underline">Connexion</a>
+                            <a href="{% url 'register' %}" class="hover:underline">Inscription</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <div class="bg-blue-100 text-white py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl font-bold-800 sm:text-5xl md:text-6xl">Bienvenue sur MyContact</h1>
+                <p class="mt-3 max-w-md mx-auto text-base sm:text-lg md:mt-5 md:text-xl">
+                    Achetez vos contacts et vendez vos produits facilement dans votre communauté.
+                </p>
+                <div class="mt-5 max-w-md mx-auto sm:flex sm: justify-center md:mt-8">
+                    <a href="{% url 'isting_list' %}" class="inline-block bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-400 transition duration-200">
+                        Liste des contacts
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p>© 2025 MyContact. Tous droits réservés.</p>
+                    <div class="text flex space-x-4 mt-4 md:mt-0">
+                        <a href="#" class="hover:underline">FAQ</a>
+                        <a href="#" class="hover:underline">Contact</a>
+                        <a href="#" class="hover:underline">Conditions d’utilisation</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>
+

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
+    <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">Créer une annonce</h2>
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+        {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ field.errors }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <h3 class="text-lg font-semibold text-gray-800 mt-6">Images</h3>  
+        {{ formset.management_form }}
+        {% for form in formset %}
+            <div class="flex items-center space-x-4">
+                {{ form.image }}
+                {% if form.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.errors }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <p class="text-sm text-gray-500">Formats (jpg,png)</p>
+        <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300">Créer l'annonce</button>
+    </form>
+</div>
+{% endblock %}
+

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="bg-white shadow-md rounded-lg p-6">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Passer une commande</h2>
+    {% if cart_item %}
+    <div class="mb-6">
+        <h3 class="text-xl font-semibold text-gray-700 mb-4">Article sélectionné</h3>
+        <div class="flex items-center space-x-4">
+            {% if cart_item.image_url %}
+                <img src="{{ cart_item.image_url }}" alt="{{ cart_item.title }}" class="w-20 h-20 object-cover rounded">
+            {% endif %}
+            <div>
+                <p class="text-lg font-medium">{{ cart_item.title }}</p>
+                <p class="text-gray-600">{{ cart_item.price }} €</p>
+            </div>
+        </div>
+    </div>
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ field.label }}</label>
+                <input type="{{ field.field.widget.input_type }}"
+                       name="{{ field.name }}"
+                       id="{{ field.id_for_label }}"
+                       value="{{ field.value|default_if_none:'' }}"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 {% if field.errors %}border-red-500{% endif %}"
+                       {% if field.field.required %}required{% endif %}>
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <p class="text-red-600 text-sm mt-1">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200">
+            Confirmer la commande
+        </button>
+    </form>
+    {% else %}
+    <p class="text-gray-600">Votre panier est vide.</p>
+    <a href="{% url 'listing_list' %}" class="text-blue-600 hover:underline">Retour aux annonces</a>
+    {% endif %}
+</div>
+{% endblock %} 
+
